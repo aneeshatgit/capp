@@ -1,0 +1,54 @@
+div(style='margin: 10px', ng-init='loggedIn=#{loggedIn}; priPhone=#{priPhone}')
+	div.alert.alert-success.alert-dismissable(notifier)
+		| Address was added successfully!
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Primary Phone Number: 
+		div.col-md-2 
+			input(type='text', ng-model='priPhone')	
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 National Registration Number: 
+		div.col-md-2 
+			input(type='text', ng-model='nrn')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Name: 
+		div.col-md-2 
+			input(type='text', ng-model='name')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Address Line 1: 
+		div.col-md-2 
+			input(type='text', ng-model='addressLn1')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Address Line 2: 
+		div.col-md-2 
+			input(type='text', ng-model='addressLn2')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Zip Code: 
+		div.col-md-2 
+			input(type='text', ng-model='zipCode')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Fixed Phone 1: 
+		div.col-md-2 
+			input(type='text', ng-model='fixedPhone1')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Fixed Phone 2: 
+		div.col-md-2 
+			input(type='text', ng-model='fixedPhone2')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Mobile Phone 1: 
+		div.col-md-2 
+			input(type='text', ng-model='mobilePhone1')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Mobile Phone 2: 
+		div.col-md-2 
+			input(type='text', ng-model='mobilePhone2')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 X Coordinate: 
+		div.col-md-2 
+			input(type='text', ng-model='x')
+	div.row(style='margin-bottom: 5px')
+		div.col-md-3 Y Coordinate: 
+		div.col-md-2 
+			input(type='text', ng-model='y')
+	br
+	button.btn.btn-primary(type='button', ng-click='updateAddress()', style='margin: 10px') Save
+	button.btn.btn-primary(type='button', ng-click='logoff()', style='margin: 10px') Exit

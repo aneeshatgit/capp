@@ -1,0 +1,8 @@
+div.col-md-4.col-md-offset-4(style="height:170px; background:rgba(189, 189, 190, 0.4); -moz-border-radius: 15px; border-radius: 15px;")
+	div(style="text-align:center")
+		p Enter your phone number:
+		input(type='text', ng-model='priPhone')
+		//img(src='/captcha.jpg')
+		br
+		button.btn.btn-primary(ng-click='sendOtp()', style="margin:10px") Generate Password
+		button.btn.btn-primary(ng-click='sendOtp()', style="margin:10px") Enter Password
