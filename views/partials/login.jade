@@ -1,8 +1,28 @@
-div.col-md-4.col-md-offset-4(style="height:170px; background:rgba(189, 189, 190, 0.4); -moz-border-radius: 15px; border-radius: 15px;")
-	div(style="text-align:center")
-		p Enter your phone number:
-		input(type='text', ng-model='priPhone')
-		//img(src='/captcha.jpg')
+div.alert.alert-danger(error-bar, style="margin: 20px")
+	| {{errors}}
+div.col-md-4.col-md-offset-4(style="background:rgba(189, 189, 190, 0.4); -moz-border-radius: 15px; border-radius: 15px;", ng-init="original=#{original}")
+	div(ng-init="public_key = '#{public_key}'")
+		p 
+			b Enter your phone number:
+		div.row
+			span.col-md-1(style="margin: 2px;") 
+				b + 	
+			input.col-md-2(type='text', ng-model='cc', placeholder='Code')
+			span.col-md-1(style="margin: 2px")
+				b -
+			input.col-md-5(type='text', ng-model='priPhone', placeholder='Phone Number')
 		br
-		button.btn.btn-primary(ng-click='sendOtp()', style="margin:10px") Generate Password
-		button.btn.btn-primary(ng-click='sendOtp()', style="margin:10px") Enter Password
+		br
+		div
+			p 
+				b Choose a method to deliver the password:
+			input(type="radio", name="method", ng-click="smsDelivery=true; voiceDelivery=false") 
+			| SMS &nbsp;&nbsp;
+			input(type="radio", name="method", ng-click="voiceDelivery=true; smsDelivery=false", checked)
+			| Voice
+		br
+		p 
+			b Are you human? (Enter the text seen in image below):
+		div(id='captcha', captcha)
+		div(style='text-align: center')
+			button.btn.btn-primary(ng-click='sendOtp()', style="margin:10px") Generate Password

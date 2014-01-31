@@ -32,3 +32,20 @@
 .notify {
   display: none;
 }
+
+.captchaDiv {
+  display: inline-block;
+}
+
+.google-map{
+  height: 340px;
+}
+
+.addressDiv {
+  display: none;
+}
+
+.selected {
+  font-weight: bold;
+  font-size: large;
+}
