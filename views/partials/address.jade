@@ -62,9 +62,9 @@ div(ng-init="priPhone=#{priPhone}; visibleTab='basic'; priPhoneValidated=true")
 									button.btn.btn-primary(ng-click='sendValidationCode("pendingPriPhone")', style="margin: 1px") Validate
 									button.btn.btn-primary(ng-click='enterCode(pendingPriPhone)', style="margin: 1px") Enter Code
 							span(ng-if='priPhoneValidated')
-								span.glyphicon.glyphicon-ok	
+								span.glyphicon.glyphicon-ok
 					div.row(style='margin-bottom: 5px')
-						div.col-md-4 Your National Registration Number: 
+						div.col-md-4 Your National Registration Number:
 						div.col-md-2
 							input(type='text', ng-model='nrn')
 					div.row(style='margin-bottom: 5px')
