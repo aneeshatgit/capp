@@ -5,9 +5,9 @@
   "dependencies": {
     "express": "*",
     "jade": "*",
-    "mongoose": "~3.8.1",
+    "mongoose": "*",
     "connect-flash": "~0.1.1",
-    "recaptcha": "~1.2.0",
+    "recaptcha": "*",
     "soap": "~0.3.1"
   }
 }
