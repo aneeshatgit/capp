@@ -6,7 +6,7 @@ exports.smser = function(numbers, message){
 				umsDepartment: params.umsDepartment,
 				umsPassword: params.umsPassword,
 				to: numbers,
-				from: params.from,
+				from: params.smsfrom,
 				text: message}
 	soap.createClient(url, function(err, client) {
 	  client.doSendSMSSimple(args, function(err, result) {
