@@ -7,10 +7,26 @@ angular.module('cdm.controllers', []).
     $scope.smsDelivery = false;
 
     $scope.sendOtp = function() {
-      //TO DO: VALIDATE PHONE NUMBER
+      $scope.errorsExist = false;
+      $scope.errors = "";
+      var cr = new RegExp("^[1-9][0-9]{0,3}$");
+      var pr = new RegExp("^[1-9][0-9]{5,9}$");
+
+      if(!cr.test($scope.cc)){
+        $scope.errorsExist = true;
+        $scope.errors = "Invalid Country Code."
+        return;
+      }
+        
+      if(!pr.test($scope.priPhone)){
+        $scope.errorsExist = true;
+        $scope.errors = "Invalid Phone Number"
+        return;
+      }
+        
+
       $scope.recaptcha_challenge_field = $('#recaptcha_challenge_field').val();
       $scope.recaptcha_response_field = $('#recaptcha_response_field').val();
-      console.log('response: '+ $scope.recaptcha_response_field);
 
       helperMethods.generateOtp($scope, $http, $location);
     }
