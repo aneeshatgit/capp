@@ -1,0 +1,28 @@
+div.col-md-12
+	div.row
+		div.col-md-2
+			label Reader Name:
+		div.col-md-8
+			input(type="text", style="margin: 2px; width: inherit", ng-model='readerName', placeholder="Enter the reader name here...")
+	div.row
+		div.col-md-2
+			label Reader MacId:
+		div.col-md-8
+			input(type="text", style="margin: 2px; width: inherit", ng-model='readerMacId', placeholder="Enter the reader Mac ID here...")
+	div.row
+		div.col-md-2
+			button.btn.btn-primary(type='button', style="margin: 2px", ng-click='addReader()', ng-class='{disabled: (readerName.trim()=="" || readerMacId.trim()=="")}') Add Reader
+	div.row
+		table.table.table-hover
+			thead
+				th Reader Name
+				th Reader Mac Id
+				th 
+			tbody
+				tr(ng-if="(allReaders==null || allReaders.length==0)")
+					td No readers defined.
+				tr(ng-repeat='reader in allReaders')
+					td {{reader.readerName}}
+					td {{reader.readerMacId}}
+					td
+						span(class="glyphicon glyphicon-minus-sign", ng-click="deleteReader(reader._id, $index)")

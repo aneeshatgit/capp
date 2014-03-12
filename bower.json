@@ -6,6 +6,6 @@
     "jquery": "~2.0.3",
     "angular": "~1.2.6",
     "angular-route": "~1.2.6",
-    "angular-cookies": "~1.2.7"
+    "jquery-ui": "~1.10.3"
   }
 }

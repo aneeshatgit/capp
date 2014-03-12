@@ -1,0 +1,6 @@
+div.col-md-12
+	div.row
+		div(style='position: relative; overflow:auto; height: 500; width: 1200; margin-top: 10px; margin-left:5px', id='cc')
+			canvas(id='drawingCanvas', style="position: absolute; z-index: 1; background-color: #F0F0F0", width="2500", height="2500", track-canvas)
+			span(ng-repeat='reader in plan.readerList', style="position: relative; z-index: 2; display: block; color: white", format-reader, id='{{reader._id}}', pos-x='{{reader.readerPositionX}}', pos-y='{{reader.readerPositionY}}', draggable=false) {{reader.readerName}}
+			div(ng-repeat='pos in positionList', style="position: absolute; z-index: 3; width: 100px; display: block; color: white", pos-x='{{pos.center.x}}', pos-y='{{pos.center.y}}', format-target) {{pos.target}}

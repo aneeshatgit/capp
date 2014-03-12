@@ -2,280 +2,223 @@
 
 /* Directives */
 
-angular.module('cdm.directives', []).
+angular.module('ilt.directives', []).
   directive('appVersion', function (version) {
     return function(scope, elm, attrs) {
       elm.text(version);
     };
   }).
-  directive('captcha', function () {
+  directive('drawCanvas', function () {
     return function(scope, elm, attrs) {
-      scope.$watch('public_key', function(nv, ov) {
-        if(nv!=null){
-          Recaptcha.create(nv, 'captcha', {
-            theme: 'white'
-          });
+      scope.canvas = elm[0];
+      var ctx = elm[0].getContext('2d');
+
+      $(elm[0]).droppable({
+        drop: function(ev, ui) {
+          var pos = {x: ui.draggable.css('left'), y: ui.draggable.css('top')};
+          $(ui.draggable.children()[0]).css('background-color', '#CD5C5C');
+          scope.readerPositionChanged(ui.draggable.attr('id'), pos);
+        }
+      });
+
+
+      function getCursorPosition(canvas, event) {
+        var x, y;
+
+        var canoffset = $(canvas).offset();
+        x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - Math.floor(canoffset.left);
+        y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop - Math.floor(canoffset.top) + 1;
+
+        return {x: x, y: y};
+      }
+
+      elm.bind('click', function(e){
+        if(!scope.drawButtonState){
+          return;
+        }
+
+        var coord = getCursorPosition(elm[0], e);
+        //add coordinates to active shape
+        scope.activeShape.coordinates.push({x: coord.x, y: coord.y});
+        var len = scope.activeShape.coordinates.length; 
+        console.log('elm'+ elm);
+        if(len==1) {
+          ctx.font = '20px Arial';
+          ctx.fillText(scope.activeShape.shapeName, scope.activeShape.coordinates[0].x, scope.activeShape.coordinates[0].y);
+        }
+        if(len>1) {
+          ctx.moveTo(scope.activeShape.coordinates[len-2].x,scope.activeShape.coordinates[len-2].y);
+          ctx.lineTo(scope.activeShape.coordinates[len-1].x,scope.activeShape.coordinates[len-1].y);
+          ctx.stroke();
+        }
+      });
+
+      scope.$watch('initDrawing', function(){
+        ctx.clearRect(0, 0, elm[0].width, elm[0].height);
+        ctx.beginPath();
+        
+
+        //draw plan
+        if(scope.plan!=null && scope.plan.shapeList!=null){
+          for (var i = 0; i < scope.plan.shapeList.length; i++) {
+            if(scope.plan.shapeList[i].coordinates!=null){
+              for (var j=0; j< scope.plan.shapeList[i].coordinates.length; j++){
+                if(j==0) {
+                  ctx.font = '20px Arial';
+                  ctx.fillText(scope.plan.shapeList[i].shapeName,scope.plan.shapeList[i].coordinates[j].x, scope.plan.shapeList[i].coordinates[j].y);  
+                }
+                if(j+1<scope.plan.shapeList[i].coordinates.length){
+                  ctx.moveTo(scope.plan.shapeList[i].coordinates[j].x, scope.plan.shapeList[i].coordinates[j].y);
+                  ctx.lineTo(scope.plan.shapeList[i].coordinates[j+1].x, scope.plan.shapeList[i].coordinates[j+1].y);
+                  ctx.stroke();
+                }
+              }
+            }
+          }
         }
       });
     };
   }).
-  directive('notifier', function () {
-    return function(scope, elm, attrs) {
-      console.log('in directive');
-      scope.$watch('notify', function(nv, ov){
-        if(nv) {
-          console.log('in green visibile');
-          elm.removeClass('notify');
-        } else {
-          console.log('in green invisibile');
-          elm.addClass('notify');
-        }
-      })
-    };
-  }).
-  directive('modalNotifier', function () {
-    return function(scope, elm, attrs) {
-      scope.$watch('modalNotify', function(nv, ov){
-        if(nv) {
-          elm.removeClass('notify');
-        } else {
-          elm.addClass('notify');
-        }
-      })
-    };
-  }).
-  directive('errorBar', function () {
-    return function(scope, elm, attrs) {
-      console.log('in directive of error bar');
-      scope.$watch('errorsExist', function(nv, ov){
-        if(nv) {
-          //console.log('in green visibile');
-          elm.removeClass('notify');
-        } else {
-          //console.log('in green invisibile');
-          elm.addClass('notify');
-        }
-      })
-    };
-  }).
-  directive('tooltipControl', function() {
+  directive('formatShape', function () {
     return {
-      link: function(scope, element, attr) {
-        var htmlProp = attr.tooltipHtml;
-        var placeProp = attr.tooltipPos;
-        if (htmlProp==undefined){
-          htmlProp = false;
-        } 
-        if (placeProp==undefined){
-          placeProp = 'auto';
-        }
-        $(element[0]).tooltip({title: attr.tooltipControl, placement: placeProp, html: htmlProp});
+      transclude: true,
+      template: "<div class='shape'><div style='display: inline-block; margin-left: 4px' ng-transclude></div>"+"<div class='shapedelete'>x</div></div>",
+      link: function(scope, elm, attr) {
+        console.log('elm: '+ $(elm.children().children()[1]));
+        $(elm.children().children()[1]).bind('click', function() {
+          scope.deleteShape(attr.formatShapeId, attr.formatShapeIndex);
+        })
       }
-    };
+    }
   }).
-  directive('htmlText', function() {
+  directive('formatReader', function () {
+    return {
+      transclude: true,
+      template: "<div class='reader'><div style='display: inline-block; margin-left: 4px; margin-right: 4px' ng-transclude></div>"+"</div>",
+      link: function(scope, elm, attr) {
+        if(attr.draggable){
+          $(elm).draggable({
+            revert: "invalid"
+          });
+        }
+
+        if(attr.posX!="" && attr.posY!="") {
+          $(elm.children()[0]).css('background-color', '#CD5C5C');
+          elm.css('top', attr.posY);
+          elm.css('left', attr.posX);
+        }
+      }
+    }
+  }).
+  directive('formatTarget', function () {
+    return {
+      transclude: true,
+      template: "<div class='target'><div style='display: inline-block; margin-left: 4px; margin-right: 4px' ng-transclude></div>"+"</div>",
+      link: function(scope, elm, attr) {
+        $(elm).draggable({
+          revert: "invalid"
+        });
+
+        if(attr.posX!="" && attr.posY!="") {
+          elm.css('top', attr.posY);
+          elm.css('left', attr.posX);
+          //elm.html();
+        }
+      }
+    }
+  }).
+  
+  directive('readerContainer', function() {
       return {
         link: function(scope, element, attr) {
-          scope.$watch('missingInfoUpdate', function(){
-            if(scope.selectedRow!=null){
-              if(scope.addressArr[scope.selectedRow].infoHtml=="<ul></ul>"){
-                $(element[0]).html("<ul><li>Minimum address data requirements are compliant.</li></ul>");
-              } else {
-                $(element[0]).html(scope.addressArr[scope.selectedRow].infoHtml);
-              }
-            }
-          });
-          scope.$watch('selectedRow', function(){
-            if(scope.selectedRow!=null){
-              if(scope.addressArr[scope.selectedRow].infoHtml=="<ul></ul>"){
-                $(element[0]).html("<ul><li>Minimum address data requirements are compliant.</li></ul>");
-              } else {
-                $(element[0]).html(scope.addressArr[scope.selectedRow].infoHtml);    
-              }
-            }
-          })
+          $(element).droppable();
         }
       };
   }).
-  directive('addressAutocomplete', function ($timeout) {
-    return function(scope, elm, attrs) {
-
-      var componentForm = {
-        street_number: 'short_name',
-        route: 'long_name',
-        locality: 'long_name',
-        administrative_area_level_1: 'short_name',
-        country: 'long_name',
-        postal_code: 'short_name'
+  directive('shapeModal', function() {
+      return {
+        link: function(scope, element, attr) {
+          scope.$watch('shapeModalShow', function(nv) {
+            if(nv){
+              $(element[0]).modal({show: true, backdrop: "static"});
+            } else {
+              $(element[0]).modal('hide');
+            }
+          });
+        }
       };
-
-
-      // Create the autocomplete object, restricting the search
-      // to geographical location types.
-      //console.log
-      var autocomplete = new google.maps.places.Autocomplete(elm[0],{ types: ['geocode'] });
-      // When the user selects an address from the dropdown,
-      // populate the address fields in the form.
-      google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        fillInAddress();
+  }).
+  directive('disableButton', function () {
+    return function(scope, elm, attrs) {
+      scope.$watch('planName', function(){
+        buttonEnableDisable();
+      });
+      scope.$watch('check', function(){
+        buttonEnableDisable();
       });
 
-      function fillInAddress() {
-        // Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();
-
-        for (var component in componentForm) {
-          document.getElementById(component).value = '';
-          //$(component).disabled = false;
-        }
-
-        // Get each component of the address from the place details
-        // and fill the corresponding field on the form.
-        for (var i = 0; i < place.address_components.length; i++) {
-          var addressType = place.address_components[i].types[0];
-          if (componentForm[addressType]) {
-            var val = place.address_components[i][componentForm[addressType]];
-            //document.getElementById(addressType).value = val;
-            switch (addressType) {
-              case 'street_number': scope.addressArr[scope.selectedRow].streetNumber = val; break;
-              case 'route': scope.addressArr[scope.selectedRow].route = val; break;
-              case 'locality': scope.addressArr[scope.selectedRow].locality = val; break;
-              case 'administrative_area_level_1': scope.addressArr[scope.selectedRow].admAreaLevel1 = val; break;
-              case 'country': scope.addressArr[scope.selectedRow].country = val; break;
-              case 'postal_code': scope.addressArr[scope.selectedRow].postalCode = val; break;
+      function buttonEnableDisable() {
+        if(scope.planName==null || scope.planName.trim()==''){
+          elm.attr("disabled", true);    
+        } else {
+          elm.attr("disabled", true);
+          for (var i in scope.readerList) {
+            if(scope.readerList[i].isSelected){
+              elm.attr("disabled", false);
+              return;    
             }
           }
-        }
-        scope.addressArr[scope.selectedRow].googleAddress = place.formatted_address;
-        scope.lat = place.geometry.location.lat();
-        scope.lng = place.geometry.location.lng();
-        scope.addressArr[scope.selectedRow].x = scope.lat;
-        scope.addressArr[scope.selectedRow].y = scope.lng;
-
-        var myLatlng = new google.maps.LatLng(scope.lat,scope.lng);
-        
-        var map = scope.mapForScope;
-
-        map.setCenter(myLatlng);
-        
-        google.maps.event.trigger(map, 'resize');
-
-        if(scope.marker!=null) {
-          scope.marker.setMap(null);
-        }
-
-        scope.marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            title:"Your Address"
-        });
-        //console.log('resizing in addre dire');
-        //scope.resizing++;
-
-        scope.$apply();
-
-      }
-    }
-  }).
-  directive('maps', function ($timeout) {
-    return {
-      link: function (scope, elem, attrs) {
-        
-        //render a basic map
-        var mapOptions, map;
-        var latitude = attrs.latitude;
-        var longitude = attrs.longitude, 
-
-        latitude = latitude && parseFloat(latitude, 10) || 43.074688;
-        longitude = longitude && parseFloat(longitude, 10) || -89.384294;
-
-        mapOptions = {
-          zoom: parseInt(attrs.zoom) || 8,
-          center: new google.maps.LatLng(latitude, longitude)
-        };
-        map = new google.maps.Map(elem[0], mapOptions);
-
-        scope.mapForScope = map;
-
-        scope.$watch('selectedRow', function(nv, ov) {
-          if(nv!=null && scope.selectedRow!=null) {
-            var x = scope.addressArr[scope.selectedRow].x;
-            var y = scope.addressArr[scope.selectedRow].y;
-            if(x!=null && y!=null) {
-              map.setCenter(new google.maps.LatLng(x, y));
-              google.maps.event.trigger(map, 'resize');
-              scope.marker = new google.maps.Marker({
-                position: new google.maps.LatLng(x, y),
-                map: map,
-                title: "Your Address"
-              })
-            }
-          }
-        });
-
-        scope.$watch('visibleTab', function(nv, ov){
-          if(nv=='address'){
-            console.log('address change..');
-            $timeout(function(){ resizeMap(); }, 100);
-          }
-        });
-        function resizeMap() {
-          google.maps.event.trigger(map, 'resize');
         }
       }
-    }
+    };
   }).
-  directive('editPhoneModal', function() {
-      console.log('edit phone modal.')
+  directive('navPillsActivation', function($location) {
       return {
         link: function(scope, element, attr) {
-          scope.$watch('editPhoneModalShow', function(nv) {
-            if(nv){
-              $(element[0]).modal({show: true, backdrop: "static"});
-            } else {
-              $(element[0]).modal('hide');
+          scope.$on('$locationChangeStart', function(next, current) { 
+            var path = $location.path();
+            var h = path.replace("/","");
+
+            $(element[0]).find("a").each(function(){
+              $(this).parent().removeClass('active');
+              if($(this).attr('href')==h) {
+                $(this).parent().addClass('active');
+              }
+            });
+          });
+        }
+      };
+  }).
+  directive('trackCanvas', function () {
+    return function(scope, elm, attrs) {
+      scope.canvas = elm[0];
+      var ctx = elm[0].getContext('2d');
+
+      scope.$watch('initDrawing', function(){
+        ctx.clearRect(0, 0, elm[0].width, elm[0].height);
+        ctx.beginPath();
+        
+
+        //draw plan
+        if(scope.plan!=null && scope.plan.shapeList!=null){
+          for (var i = 0; i < scope.plan.shapeList.length; i++) {
+            if(scope.plan.shapeList[i].coordinates!=null){
+              for (var j=0; j< scope.plan.shapeList[i].coordinates.length; j++){
+                if(j==0) {
+                  ctx.font = '20px Arial';
+                  ctx.fillText(scope.plan.shapeList[i].shapeName,scope.plan.shapeList[i].coordinates[j].x, scope.plan.shapeList[i].coordinates[j].y);  
+                }
+                if(j+1<scope.plan.shapeList[i].coordinates.length){
+                  ctx.moveTo(scope.plan.shapeList[i].coordinates[j].x, scope.plan.shapeList[i].coordinates[j].y);
+                  ctx.lineTo(scope.plan.shapeList[i].coordinates[j+1].x, scope.plan.shapeList[i].coordinates[j+1].y);
+                  ctx.stroke();
+                }
+              }
             }
-          });
+          }
         }
-      };
-  }).
-  directive('deliveryMethodModal', function() {
-      return {
-        link: function(scope, element, attr) {
-          scope.$watch('deliveryMethodModalShow', function(nv) {
-            if(nv){
-              $(element[0]).modal({show: true, backdrop: "static"});
-            } else {
-              $(element[0]).modal('hide');
-            } 
-          });
-        }
-      };
-  }).
-  directive('codeEntryModal', function() {
-      return {
-        link: function(scope, element, attr) {
-          scope.$watch('codeEntryModalShow', function(nv) {
-            if(nv){
-              $(element[0]).modal({show: true, backdrop: "static"});
-            } else {
-              $(element[0]).modal('hide');
-            }
-          });
-        }
-      };
-  }).
-  directive('resultModal', function() {
-      return {
-        link: function(scope, element, attr) {
-          scope.$watch('resultModalShow', function(nv) {
-            if(nv){
-              $(element[0]).modal({show: true, backdrop: "static"});
-            } else {
-              $(element[0]).modal('hide');
-            }
-          });
-        }
-      };
-  });
+      });
+    };
+  });  
+
 

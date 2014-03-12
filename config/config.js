@@ -13,8 +13,8 @@ module.exports = function(app, express){
     app.use(express.cookieParser());
     app.use(express.session({ secret: params.session_secret , cookie: {maxAge: 6000000}}));
     app.use(function(req, res, next) {
-        res.locals.loggedIn = req.session.loggedIn;
-        res.locals.priPhone = req.session.priPhone;
+        //res.locals.loggedIn = req.session.loggedIn;
+        //res.locals.priPhone = req.session.priPhone;
         next();
     });    
     app.use(flash());

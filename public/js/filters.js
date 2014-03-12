@@ -2,9 +2,15 @@
 
 /* Filters */
 
-angular.module('cdm.filters', []).
-  filter('interpolate', function (version) {
-    return function (text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
+angular.module('ilt.filters', []).
+  filter('availableReaders', function () {
+    return function (items) {
+    	//items = list.slice();
+        for (var i = 0; i < items.length; i++) {
+	      	if(items[i].containingPlan!="" && items[i].containingPlan!=null) {
+    	  		items.splice(i,1);
+      		}
+      	}
+      	return items;
     }
   });

@@ -1,0 +1,27 @@
+div.col-md-12
+	div.row
+		div.col-md-3
+			button.btn.btn-default(type='button', style="margin: 2px; display: block", ng-click='shapeModalShow = true', ng-class="{active: drawButtonState}") {{buttonText}}
+			button.btn.btn-default(type='button', style="margin: 2px", ng-click='shapeComplete()') Done
+		div.col-md-9
+			label Shapes:
+			div(style="height: 60px; border: inset; border-width: 1px; margin-right: 5px; width: 100%")
+				span(ng-repeat='shape in plan.shapeList', format-shape, format-shape-id="{{shape._id}}", format-shape-index="{{$index}}") {{shape.shapeName}}
+	div.row
+		div(style='position: relative; overflow:auto; height: 400; width: 1200; margin-top: 10px', id='cc')
+			canvas(id='drawingCanvas', style="position: absolute; z-index: 1; background-color: #F0F0F0", width="2500", height="2500", draw-canvas)
+			span(ng-repeat='reader in plan.readerList', style="position: relative; z-index: 2; display: block; color: white", format-reader, id='{{reader._id}}', pos-x='{{reader.readerPositionX}}', pos-y='{{reader.readerPositionY}}', draggable=true) {{reader.readerName}}
+div.modal.fade(shape-modal)
+	div.modal-dialog
+		div.modal-content
+			div.modal-header
+				button.close(type='button', data-dismiss='modal', aria-hidden='true', ng-click='editPhoneModalShow=false; newPhoneNumber=""') &times;
+				h4.modal-title New Shape
+			div.modal-body
+				p Shape Name:
+				input(type="text", ng-model='newShapeName', placeholder='New shape name...')
+				br
+				small Enter a friendly name for the shape. Eg. 2nd Floor, Corner Cabin
+			div.modal-footer
+				button.btn.btn-default(type='button', data-dismiss='modal', ng-click='shapeModalShow=false; newShapeName=""') Cancel
+				button.btn.btn-primary(type='button', ng-click='saveNewShape()') Save

@@ -1,13 +1,14 @@
 {
-  "name": "application-name",
+  "name": "indoor-location-tracker",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "*",
-    "jade": "*",
-    "mongoose": "*",
+    "express": "~3.4.8",
+    "jade": "~1.1.5",
+    "mongoose": "~3.8.7",
     "connect-flash": "~0.1.1",
-    "recaptcha": "*",
-    "soap": "~0.3.1"
+    "memory-cache": "0.0.5",
+    "custom-logger": "~0.2.1",
+    "socket.io": "~0.9.16"
   }
 }

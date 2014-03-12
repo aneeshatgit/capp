@@ -1,0 +1,41 @@
+div.col-md-12
+	div.row
+		div.col-md-2
+			label Plan Name:
+		div.col-md-4
+			input(type="text", style="margin: 2px; width: 100%", ng-model='planName', placeholder="Enter the plan name here...")
+		div.col-md-1
+			label(style="margin-right: 2px") Readers:
+		div.col-md-5
+			span(ng-if="(readerList==null || readerList.length==0)")
+				| No readers are available.
+			span(ng-if="readerList!=null && readerList.length!=0")
+				div.multiselect
+					span(ng-repeat='reader in readerList | availableReaders')
+						label(style="display:block")
+							input(type='checkbox', style="margin-right: 2px", ng-model='reader.isSelected', ng-change='incCheck()') 
+							| {{reader.readerName}}
+	div.row
+		div.col-md-2
+			button.btn.btn-primary(type='button', style="margin: 2px", ng-click='addPlan()' disable-button) Add Plan
+	div.row
+		table.table.table-hover
+			thead
+				th Plan Name
+				th Readers
+				th 
+			tbody
+				tr(ng-if="allPlans.length==0")
+					td No plans defined.
+				tr(ng-repeat='plan in allPlans')
+					td {{plan.planName}}
+					td 
+						span(ng-repeat='rd in plan.readerList') 
+							{{rd.readerName}} 
+							span(ng-if='$index!=plan.readerList.length-1'),&nbsp;
+					td
+						button.btb.btn-default(type='button', ng-click='drawPlan(plan._id)') Edit Plan
+					td
+						button.btb.btn-default(type='button', ng-click='trackPlan(plan._id)', ng-class="{disabled: (plan.complete=='No')}") Track Plan
+					td
+						span(class="glyphicon glyphicon-minus-sign", ng-click="deletePlan(plan._id, $index)")

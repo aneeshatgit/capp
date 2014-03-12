@@ -2,45 +2,38 @@
 
 // Declare app level module which depends on filters, and services
 
-angular.module('cdm', [
-  'cdm.controllers',
-  'cdm.filters',
-  'cdm.services',
-  'cdm.directives',
-  'ngRoute',
-  'ngCookies'
+angular.module('ilt', [
+  'ilt.controllers',
+  'ilt.filters',
+  'ilt.services',
+  'ilt.directives',
+  'ngRoute'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
-    when('/login', {
-      templateUrl: 'partials/login',
-      controller: 'loginController'
+    when('/allplans', {
+      templateUrl: 'partials/allplans',
+      controller: 'allPlansController'
     }).
-    when('/otp', {
-      templateUrl: 'partials/otp',
-      controller: 'otpController'
+    when('/allreaders', {
+      templateUrl: 'partials/allreaders',
+      controller: 'allReadersController'
     }).
-    when('/address', {
-      templateUrl: 'partials/address',
-      controller: 'addressController'
+    when('/drawplan/:id', {
+      templateUrl: 'partials/drawplan',
+      controller: 'drawPlanController'
+    }).
+    when('/trackplan/:id', {
+      templateUrl: 'partials/trackplan',
+      controller: 'trackPlanController'
+    }).
+    when('/datapost', {
+      templateUrl: 'partials/datapost',
+      controller: 'datapostController'
     }).
     otherwise({
-      redirectTo: '/login'
+      redirectTo: '/allplans'
     });
 
   $locationProvider.html5Mode(true);
-})/*.
-run(function($location, userService, $rootScope, $cookies){
-  $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-    if(!userService.isLoggedIn){
-      console.log('user not logged in');
-      if(next.templateUrl == "partials/otp" && userService.priPhone!="") {
-        $location.path("/otp");
-      } else if(next.templateUrl != "partials/login") {
-        $location.path( "/login" );
-      }
-    } else {
-      //do something here.
-    }
-  })
-})*/;
+});
