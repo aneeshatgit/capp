@@ -90,7 +90,7 @@ module.exports = function(app, models, log, io){
 
         //Sending to test app
         appSock.emit('alert', {alertId: alertId, coords: coords});
-        res.send({id: alertId});
+        res.send({id: alertId, coords: coords});
       }
     })
   });

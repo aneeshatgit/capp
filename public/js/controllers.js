@@ -51,7 +51,7 @@ angular.module('capp.controllers', []).
     var msg = io.connect('http://localhost:3000/app');
     msg.on('alert', function(data) {
       console.log('yes recieved the message: ' + data.msg);
-      $scope.message = data.msg;
+      $scope.message = data.alertId;
       $scope.coords = data.coords;
       $scope.$apply();
     })
