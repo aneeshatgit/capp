@@ -1,0 +1,11 @@
+.row(style="text-align: -webkit-center")
+	#mapArea.ma(latitude="12.967084", longitude="77.581129", zoom="8", google-map)
+.row
+	.msg-area
+		.row
+			p Alert Message
+		.row
+			textarea(rows="3", cols="100", ng-model="alertContent")
+		.row
+			button.btn.btn-primary(ng-click="sendAlert()", style="margin: 5px") Send Alert & View Status
+			button.btn.btn-primary(ng-click="clear()", style="margin: 5px") Clear Alert

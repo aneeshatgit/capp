@@ -2,37 +2,41 @@
 
 // Declare app level module which depends on filters, and services
 
-angular.module('ilt', [
-  'ilt.controllers',
-  'ilt.filters',
-  'ilt.services',
-  'ilt.directives',
+angular.module('capp', [
+  'capp.controllers',
+  'capp.filters',
+  'capp.services',
+  'capp.directives',
   'ngRoute'
 ]).
 config(function ($routeProvider, $locationProvider) {
   $routeProvider.
-    when('/allplans', {
-      templateUrl: 'partials/allplans',
-      controller: 'allPlansController'
+    when('/alertsend', {
+      templateUrl: 'partials/alertsend',
+      controller: 'alertSendController'
     }).
-    when('/allreaders', {
-      templateUrl: 'partials/allreaders',
-      controller: 'allReadersController'
+    when('/alertstatus/:id', {
+      templateUrl: 'partials/alertstatus',
+      controller: 'alertStatusController'
     }).
-    when('/drawplan/:id', {
-      templateUrl: 'partials/drawplan',
-      controller: 'drawPlanController'
+    when('/testapp', {
+      templateUrl: 'partials/testapp',
+      controller: 'testAppController'
     }).
-    when('/trackplan/:id', {
-      templateUrl: 'partials/trackplan',
-      controller: 'trackPlanController'
+    when('/testclient', {
+      templateUrl: 'partials/testclient',
+      controller: 'testClientController'
     }).
-    when('/datapost', {
-      templateUrl: 'partials/datapost',
-      controller: 'datapostController'
+    when('/allalerts', {
+      templateUrl: 'partials/allalerts',
+      controller: 'allAlertsController'
+    }).
+    when('/testalertget', {
+      templateUrl: 'partials/testalertget',
+      controller: 'testAlertGetController'
     }).
     otherwise({
-      redirectTo: '/allplans'
+      redirectTo: '/alertsend'
     });
 
   $locationProvider.html5Mode(true);

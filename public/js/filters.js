@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('ilt.filters', []).
+angular.module('capp.filters', []).
   filter('availableReaders', function () {
     return function (items) {
     	//items = list.slice();

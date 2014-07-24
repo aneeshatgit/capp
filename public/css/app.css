@@ -29,60 +29,16 @@
   padding: 0;
 }
 
-.notify {
-  display: none;
+.ma{
+  width: 1150px;
+  height: 450px;
 }
 
-
-.incompletePlan {
-  color: red;
+.ma-big{
+  width: 1150px;
+  height: 450px;
 }
 
-.shape {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background-color: #9AE3A9;
-  display: inline-block;
-  margin: 2px;
-}
-
-.shapedelete {
-  background-color: black; 
-  color: white; 
-  width: 20px;
-  margin: 5px; 
-  display: inline-block;
-  -webkit-border-radius: 99px;
-  -moz-border-radius: 99px;
-  border-radius:99px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.reader {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  display: inline-block;
-  background-color: black;
-  margin: 2px;
-  cursor: default;
-}
-.target {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  display: inline-block;
-  background: rgba(0,0,255,0.5);
-  margin: 2px;
-  cursor: default;
-}
-
-
-.multiselect {
-    width:100%;
-    height:8em;
-    border:solid 1px #c0c0c0;
-    overflow:auto;
+.msg-area {
+  margin-left: 60px;
 }

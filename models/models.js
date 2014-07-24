@@ -2,33 +2,29 @@ module.exports = function(mongoose) {
 	var Schema = mongoose.Schema;
 	var models = {};
 	
-	//PLAN SCHEMA 
-	var plan = new Schema({
-		planName: String,
-		shapeList: [{
-			shapeName: String,
-			coordinates: [{
-				x: Number,
-				y: Number
-			}]
-		}],
-		readerList: [{ type: String, ref: 'Reader' }]
+	//DEVICE SCHEMA 
+	var regid = new Schema({
+		rid: String,
+		deviceType: {type: String, default: 'A'}
 	});
 
 	
-	models.plan = mongoose.model('Plan', plan);
+	models.regid = mongoose.model('Regid', regid);
 
-	//READER SCHEMA 
-	var reader = new Schema({
-		readerName: String,
-		readerMacId: String,
-		readerPositionX: String,
-		readerPositionY: String,
-		containingPlan: { type: String, ref: 'Plan' }
+	
+	var coordSchema = new Schema({lat: Number, lng: Number});
+
+	//ALERT SCHEMA 
+	var alert = new Schema({
+		msg: String,
+		count: {type: Number, default: 0},
+		alertArea: [coordSchema]
 	});
 
+	
+	models.alert = mongoose.model('Alerts', alert);
 
-	models.reader = mongoose.model('Reader', reader);
+
 
 	return models;
 }

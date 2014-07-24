@@ -1,17 +1,15 @@
 extends layout
 
 block body
-  img(src="img/umslogo.jpg", style="margin: 10px")
   div
-    div.navbar.navbar-default
-      ul.nav.navbar-nav(nav-pills-activation role='navigation')
-        li
-          a.navbar-brand Indoor Location Tracker
-        li
-          a(href='allplans') Plans
-        li
-          a(href='allreaders') Readers
-  div(ng-view, style="margin: 5px")
+    img(src="img/umslogo.jpg", style="margin: 10px; float: left")
+    div(style="float: right; margin-right: 20px")
+      a(href='/sendalert') Send Alert
+      span &nbsp; | &nbsp;
+      a(href='/allalerts') View All Alerts
+      span &nbsp; | &nbsp;
+      a(href='/testalertget') Test Alert Getter
+  div(ng-view)
 
 
   script(src='bower_components/angular/angular.js')
@@ -19,6 +17,7 @@ block body
   script(src='bower_components/jquery/jquery.js')
   script(src='bower_components/bootstrap/dist/js/bootstrap.js')
   script(src='bower_components/jquery-ui/ui/minified/jquery-ui.min.js')
+  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBsbzGhxMV5F6DdlMHOH-DGkpo9A6JZQaw&sensor=false')
   script(src='js/app.js')
   script(src='js/services.js')
   script(src='js/controllers.js')

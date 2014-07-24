@@ -1,0 +1,12 @@
+.col-md-12
+	table.table
+		thead
+			tr
+				th Alert ID
+				th Alert Message 
+		tbody
+			tr(ng-repeat='alert in alerts')
+				td 
+					a(href='/alertstatus/{{alert._id}}'){{alert._id}}
+				td {{alert.msg}}
+

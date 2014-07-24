@@ -5,7 +5,7 @@
 
 // Demonstrate how to register services
 // In this case it is a simple value service.
-angular.module('ilt.services', []).
+angular.module('capp.services', []).
   value('version', '0.1').
   factory('helperMethods', function() {
     var factory = {};

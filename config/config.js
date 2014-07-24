@@ -26,11 +26,13 @@ module.exports = function(app, express){
   //env specific config
   app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    console.log("connection string: "+ params.mongo_dev_string);
     app.mongoose.connect(params.mongo_dev_string);
   });
 
   app.configure('production', function(){
     app.use(express.errorHandler());
+    console.log("connection string: "+ params.mongo_prod_string);
     app.mongoose.connect(params.mongo_prod_string);
   });
 
