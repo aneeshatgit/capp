@@ -67,18 +67,17 @@ module.exports = function(app, models, log, io){
 
           //TO DO: Find a better way to convert json to array.
           //Convert json to array
-          log.info("json of regids from mongo: "+ JSON.stringify(regids));
           var registrationIds = [];
 
           for (var i=0; i< regids.length; i++) {
             registrationIds.push(regids[i].rid);
           }
 
-          log.info('array of reg ids sent to gcm: '+ registrationIds);
+          log.info('length of reg ids sent to gcm: '+ registrationIds.length);
           var sender = new gcm.Sender('AIzaSyBsbzGhxMV5F6DdlMHOH-DGkpo9A6JZQaw');
           
           sender.send(message, registrationIds, 4, function (err, result) {
-            console.log(result);
+            log.info(result);
           });
         });
 
